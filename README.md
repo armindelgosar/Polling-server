@@ -22,4 +22,4 @@ aper 19 1
 - And the value in the latest line displays the simulation time. If there are no values LCM will be chosen by default.
 
 Here is a sample output:
-![image](https://github.com/armindelgosar/Polling-server/assets/60629485/6a15c512-8482-4ae3-ada4-84fddac898b2)
+![image](https://github.com/armindelgosar/Polling-server/assets/60629485/b7301f5b-74da-4fa7-b8e1-c64e585c5c51)
