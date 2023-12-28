@@ -22,3 +22,4 @@ aper 19 1
 - And the value in the latest line displays the simulation time. If there are no values LCM will be chosen by default.
 
 Here is the sample output:
+<img src="files/img.png">
