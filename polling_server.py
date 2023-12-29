@@ -28,16 +28,15 @@ class Runner:
 
     def _validate_schedulable(self):
         if not self.scheduler.check_schedulability():
-            print("____THESE TASKS ARE NOT ABLE TO BE SCHEDULED!____")
-            return False
-        print("TASKS ARE VALIDATED. SCHEDULING STARTS...")
-        return True
+            print("____THESE TASKS ARE NOT SCHEDULABLE. SOME DEADLINES MIGHT BE MISSED BASED ON END TIME!____")
+        else:
+            print("____TASKS ARE SCHEDULABLE!____")
+        print("SCHEDULING IS IN PROGRESS...")
 
     def run(self, input_path: str):
         self._add_init_data(ExternalIntegrator.create_tasks(input_path))
         self.scheduler = Scheduler(self.tasks, self.end_time)
-        # if not self._validate_schedulable():
-        #     return
+        self._validate_schedulable()
         report = self.scheduler.schedule()
         ExternalIntegrator.display_report(report)
 
