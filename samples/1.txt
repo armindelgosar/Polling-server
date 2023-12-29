@@ -5,4 +5,4 @@ aper 2 2
 aper 8 1
 aper 12 2
 aper 19 1
-24
+59

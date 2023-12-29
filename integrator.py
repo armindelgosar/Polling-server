@@ -35,7 +35,7 @@ class ExternalIntegrator:
         cls._generate_periodic_diagram_data(axs[:-2], cat_data, end_time)
         cls._generate_server_charge_diagram_data(axs[-1], report_data, end_time)
 
-        plt.xticks(range(0, 25))
+        plt.xticks(range(0, end_time))
         plt.tight_layout()
         plt.show()
 
@@ -65,9 +65,9 @@ class ExternalIntegrator:
         t_values = list(logs.keys())
         color = cls.random_color()
         ax.fill_between(t_values, 0, s_charge_values, color=color, alpha=1)
-        for i in range(0, end_time - 1):
-            if logs[i].get("idle") or logs[i].get("task_period") > logs[i].get("server_period") or abs(s_charge_values[i + 1] - s_charge_values[i]) == 2:
-                ax.fill_between([t_values[i], t_values[i + 1]], 0, [2, 2], color="white", alpha=1)
+        # for i in range(0, end_time - 1):
+        #     if logs[i].get("idle") or logs[i].get("task_period") > logs[i].get("server_period") or abs(s_charge_values[i + 1] - s_charge_values[i]) == 2:
+        #         ax.fill_between([t_values[i], t_values[i + 1]], 0, [2, 2], color="white", alpha=1)
         ax.set_ylabel('Cs')
         ax.set_xlabel('Time')
         ax.set_ylim(0, 2)
@@ -85,7 +85,7 @@ class ExternalIntegrator:
             ax.set_ylabel(f'τ{task}')
             ax.set_xlim(0, end_time)
             ax.set_ylim(0, 1)
-            ax.set_xticks(range(0, 25))
+            ax.set_xticks(range(0, end_time))
             ax.grid(True, which='both', axis='x', linestyle='--', linewidth=1)
 
     @classmethod
@@ -103,5 +103,5 @@ class ExternalIntegrator:
         ax.set_ylabel('Aperiodic Requests')
         ax.set_xlim(0, end_time)
         ax.set_ylim(0, 1)
-        ax.set_xticks(range(0, 25))
+        ax.set_xticks(range(0, end_time))
         ax.grid(True, which='both', axis='x', linestyle='--', linewidth=1)

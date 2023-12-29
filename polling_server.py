@@ -27,16 +27,23 @@ class Runner:
                 self.tasks[task.type].append(task)
 
     def _validate_schedulable(self):
-        if not self.scheduler.check_schedulability():
-            print("____THESE TASKS ARE NOT SCHEDULABLE. SOME DEADLINES MIGHT BE MISSED BASED ON END TIME!____")
+        if not self.end_time == self.scheduler.find_hyper_period():
+            print("____HYPER PERIOD IS NOT EQUAL TO GIVEN END TIME___")
+            valid = True
+        elif not self.scheduler.check_schedulability():
+            print("____THESE TASKS ARE NOT SCHEDULABLE!____")
+            valid = False
         else:
             print("____TASKS ARE SCHEDULABLE!____")
-        print("SCHEDULING IS IN PROGRESS...")
+            valid = True
+        return valid
 
     def run(self, input_path: str):
         self._add_init_data(ExternalIntegrator.create_tasks(input_path))
         self.scheduler = Scheduler(self.tasks, self.end_time)
-        self._validate_schedulable()
+        if not self._validate_schedulable():
+            return
+        print("SCHEDULING IS IN PROGRESS...")
         report = self.scheduler.schedule()
         ExternalIntegrator.display_report(report)
 
@@ -80,11 +87,10 @@ class Scheduler:
         val = total_task_count * (2 ** (1 / total_task_count) - 1)
         return utility <= val
 
-    def _find_end_time(self):
-        if p_end := self.end_time:
-            return p_end
-        periods = [t.period for t in self._periodic_tasks].append(self._server.period)
-        return reduce(lambda x, y: (x * y) // math.gcd(x, y), periods)
+    def find_hyper_period(self):
+        periods = {t.period for t in self._periodic_tasks}
+        periods.add(self._server.period)
+        return reduce(lambda x, y: x * y // math.gcd(x, y), periods)
 
     def _add_tasks_to_queue(self, queue: List, time: int):
         for pt in self._periodic_tasks:
@@ -174,7 +180,7 @@ class Scheduler:
 
     def schedule(self):
         time = 0
-        end_time = self._find_end_time()
+        end_time = self.end_time or self.find_hyper_period()
         execution_logger = {}
         queue = []
         while time < end_time:
